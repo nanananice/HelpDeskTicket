@@ -20,7 +20,7 @@ services:
       - "5555:5555"
     depends_on:
       - db
-    command: sh -c "npx prisma generate && npx prisma migrate deploy && npx prisma db push && npx prisma studio --hostname 0.0.0.0 & ./start.sh"
+    command: sh -c "npx prisma studio --hostname 0.0.0.0 & ./start.sh"
     
 volumes:
   postgres_data:

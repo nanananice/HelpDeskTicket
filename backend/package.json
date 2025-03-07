@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon src/index.js",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "seed": "node prisma/seed/seed.js",
+    "db:reset": "npx prisma migrate reset && npm run seed"
   },
   "keywords": [],
   "author": "",
