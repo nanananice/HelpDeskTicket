@@ -22,7 +22,7 @@ function TicketList() {
     return (
         <div className="App">
             <header>
-                <h1>Help Desk Ticket System</h1>
+                <h1>Helsa Desk Tickest System</h1>
             </header>
             
             {error && <div className="error-container">{error}</div>}

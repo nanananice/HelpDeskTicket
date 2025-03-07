@@ -19,26 +19,37 @@ router.get('/', async (req, res) => {
     }
 });
 
-// GET single ticket by ID
-router.get('/:id', async (req, res) => {
+// POST new ticket
+router.post('/', async (req, res) => {
     try {
-        const ticketId = parseInt(req.params.id);
-        if (isNaN(ticketId)) {
-            return res.status(400).json({ error: 'Invalid ticket ID' });
+        const { title, description, contactInfo, status } = req.body;
+        
+        // Log the received data
+        console.log('Received data:', req.body);
+
+        // Validate required fields
+        if (!title || !description || !contactInfo || !status) {
+            return res.status(400).json({ 
+                error: 'Missing required fields',
+                required: ['title', 'description', 'contactInfo', 'status']
+            });
         }
 
-        const ticket = await prisma.ticket.findUnique({
-            where: { id: ticketId }
+        const newTicket = await prisma.ticket.create({
+            data: {
+                title,
+                description,
+                contactInfo,
+                status
+            }
         });
-
-        if (!ticket) {
-            return res.status(404).json({ error: 'Ticket not found' });
-        }
-
-        res.json(ticket);
+        res.status(201).json(newTicket);
     } catch (error) {
-        console.error('Error fetching ticket:', error);
-        res.status(500).json({ error: 'Failed to fetch ticket' });
+        console.error('Error creating ticket:', error);
+        res.status(500).json({ 
+            error: 'Failed to create ticket',
+            details: error.message 
+        });
     }
 });
 
