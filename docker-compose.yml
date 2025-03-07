@@ -17,8 +17,10 @@ services:
       DATABASE_URL: "postgresql://postgres:password@db:5432/helpdesk?schema=public&sslmode=disable&pgbouncer=false"
     ports:
       - "3001:3001"
+      - "5555:5555"
     depends_on:
       - db
-      
+    command: sh -c "npx prisma generate && npx prisma db push && npx prisma studio --hostname 0.0.0.0 & /start.sh"
+    
 volumes:
   postgres_data:
