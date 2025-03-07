@@ -10,3 +10,14 @@ CREATE TABLE "Ticket" (
 
     CONSTRAINT "Ticket_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateTable
+CREATE TABLE "Status" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    CONSTRAINT "Status_pkey" PRIMARY KEY ("id")
+);
+
+-- UpdateTable
+ALTER TABLE "Ticket" ADD COLUMN "statusId" INT NOT NULL;
+ALTER TABLE "Ticket" ADD CONSTRAINT "Ticket_statusId_fkey" FOREIGN KEY ("statusId") REFERENCES "Status"("id");

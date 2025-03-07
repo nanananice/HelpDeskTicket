@@ -20,20 +20,16 @@ function TicketList() {
     }, []);
 
     return (
-        <div className="App">
-            <header>
-                <h1>Helsa Desk Tickest System</h1>
-            </header>
-            
+        <div className="App">          
             {error && <div className="error-container">{error}</div>}
             
             <div className="ticket-list">
                 <ul>
                     {tickets.map(ticket => (
-                        <li key={ticket.id} className={`ticket status-${ticket.status.toLowerCase()}`}>
+                        <li style={{ border: '1px solid black'}} key={ticket.id} className={`ticket status-${ticket.status.name.toLowerCase()}`}>
                             <h3>{ticket.title}</h3>
                             <p>{ticket.description}</p>
-                            <p>Status: {ticket.status}</p>
+                            <p>Status: {ticket.status.name}</p>
                             <p>Contact: {ticket.contactInfo}</p>
                             <p>Created: {new Date(ticket.createdAt).toLocaleDateString()}</p>
                         </li>

@@ -1,3 +1,4 @@
+// filepath: c:\Users\Tripo\Documents\HelpDeskTicket\backend\routes\tickets.js
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
 
@@ -8,6 +9,7 @@ const prisma = new PrismaClient();
 router.get('/', async (req, res) => {
     try {
         const tickets = await prisma.ticket.findMany({
+            include: { status: true },
             orderBy: {
                 createdAt: 'desc'
             }
@@ -22,16 +24,16 @@ router.get('/', async (req, res) => {
 // POST new ticket
 router.post('/', async (req, res) => {
     try {
-        const { title, description, contactInfo, status } = req.body;
+        const { title, description, contactInfo, statusId } = req.body;
         
         // Log the received data
         console.log('Received data:', req.body);
 
         // Validate required fields
-        if (!title || !description || !contactInfo || !status) {
+        if (!title || !description || !contactInfo || !statusId) {
             return res.status(400).json({ 
                 error: 'Missing required fields',
-                required: ['title', 'description', 'contactInfo', 'status']
+                required: ['title', 'description', 'contactInfo', 'statusId']
             });
         }
 
@@ -40,7 +42,7 @@ router.post('/', async (req, res) => {
                 title,
                 description,
                 contactInfo,
-                status
+                statusId
             }
         });
         res.status(201).json(newTicket);
