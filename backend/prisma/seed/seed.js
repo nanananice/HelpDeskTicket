@@ -47,14 +47,14 @@ async function main() {
     { 
       id: 1, 
       username: 'testadmin', 
-      password: await bcrypt.hash('adminpass', 10),
+      password: await bcrypt.hash('testadmin', 10),
       email: 'admin@example.com',
       roleId: 1 // ADMIN role
     },
     { 
       id: 2, 
       username: 'testuser', 
-      password: await bcrypt.hash('userpass', 10),
+      password: await bcrypt.hash('testuser', 10),
       email: 'user@example.com',
       roleId: 2 // USER role
     }
