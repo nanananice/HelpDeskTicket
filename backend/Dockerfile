@@ -2,7 +2,11 @@ FROM node:18
 
 WORKDIR /app
 
+# Copy package files first for better layer caching
 COPY package*.json ./
+
+# Clear any existing node_modules and rebuild for Linux environment
+RUN rm -rf node_modules
 RUN npm install
 
 COPY prisma ./prisma/

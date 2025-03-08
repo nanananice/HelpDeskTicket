@@ -1,4 +1,3 @@
-// filepath: c:\Users\Tripo\Documents\HelpDeskTicket\backend\routes\tickets.js
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
 
