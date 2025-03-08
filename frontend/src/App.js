@@ -1,8 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import './App.css';
+import './styles/global.css';
+import './styles/layout.css';
+import './styles/auth.css';
+import './styles/tickets.css';
 import Login from './components/Login';
-import TicketList from './components/TicketList';
+import TicketList from './components/Tickets/TicketList';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
 
