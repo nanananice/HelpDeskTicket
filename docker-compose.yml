@@ -7,7 +7,7 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: helpdesk
     ports:
-      - "5432:5432"
+      - "15432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -17,10 +17,9 @@ services:
       DATABASE_URL: "postgresql://postgres:password@db:5432/helpdesk?schema=public&sslmode=disable&pgbouncer=false"
     ports:
       - "3001:3001"
-      - "5555:5555"
     depends_on:
       - db
-    command: sh -c "npx prisma studio --hostname 0.0.0.0 & ./start.sh"
+    command: sh -c "./start.sh"
     
 volumes:
   postgres_data:
