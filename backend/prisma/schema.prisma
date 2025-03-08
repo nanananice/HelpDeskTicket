@@ -8,19 +8,52 @@ generator client {
   binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
+// Ticket Model
 model Ticket {
-  id          Int      @id @default(autoincrement())
+  id          Int           @id @default(autoincrement())
   title       String
   description String
-  contactInfo String
+  userId      Int
   statusId    Int
-  status      Status   @relation(fields: [statusId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdById Int
+  updatedById Int
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  // Relationships
+  user        User          @relation("TicketCreator", fields: [userId], references: [id]) // Ticket creator
+  status      TicketStatus  @relation(fields: [statusId], references: [id])
+  createdBy   User          @relation("TicketCreatedBy", fields: [createdById], references: [id])
+  updatedBy   User          @relation("TicketUpdatedBy", fields: [updatedById], references: [id])
 }
 
-model Status {
+// Ticket Status Model
+model TicketStatus {
+  id      Int      @id @default(autoincrement())
+  name    String   @unique
+  tickets Ticket[]
+}
+
+// User Model
+model User {
+  id        Int       @id @default(autoincrement())
+  username  String
+  password  String
+  email     String    @unique
+  roleId    Int
+  createdAt DateTime  @default(now())
+  tickets   Ticket[]  @relation("TicketCreator") // One-to-Many: User can create multiple tickets
+  createdTickets Ticket[] @relation("TicketCreatedBy")
+  updatedTickets Ticket[] @relation("TicketUpdatedBy")
+
+  role      Role      @relation(fields: [roleId], references: [id])
+}
+
+// Role Model (For Access Control)
+model Role {
   id          Int      @id @default(autoincrement())
-  name        String
-  tickets     Ticket[]
+  name        String   @unique
+  users       User[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
