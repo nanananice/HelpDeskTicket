@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  // Create statuses if they don't exist
+  // Create ticket statuses if they don't exist
   const statuses = [
     { id: 1, name: 'PENDING' },
     { id: 2, name: 'ACCEPTED' },
@@ -14,7 +14,7 @@ async function main() {
   console.log('Seeding status data...');
   
   for (const status of statuses) {
-    await prisma.status.upsert({
+    await prisma.ticketStatus.upsert({
       where: { id: status.id },
       update: {},
       create: status
@@ -22,6 +22,54 @@ async function main() {
   }
   
   console.log('Status data seeded successfully!');
+
+  // Create roles if they don't exist
+  const roles = [
+    { id: 1, name: 'ADMIN' },
+    { id: 2, name: 'USER' }
+  ];
+
+  console.log('Seeding role data...');
+  
+  for (const role of roles) {
+    await prisma.role.upsert({
+      where: { id: role.id },
+      update: {},
+      create: role
+    });
+  }
+  
+  console.log('Role data seeded successfully!');
+
+  // Create users if they don't exist
+  const users = [
+    { 
+      id: 1, 
+      username: 'testadmin', 
+      password: 'adminpass', // In production, use proper password hashing
+      email: 'admin@example.com',
+      roleId: 1 // ADMIN role
+    },
+    { 
+      id: 2, 
+      username: 'testuser', 
+      password: 'userpass', // In production, use proper password hashing
+      email: 'user@example.com',
+      roleId: 2 // USER role
+    }
+  ];
+
+  console.log('Seeding user data...');
+  
+  for (const user of users) {
+    await prisma.user.upsert({
+      where: { id: user.id },
+      update: {},
+      create: user
+    });
+  }
+  
+  console.log('User data seeded successfully!');
 }
 
 main()
