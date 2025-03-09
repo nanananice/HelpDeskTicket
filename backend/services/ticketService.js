@@ -16,6 +16,20 @@ export const ticketService = {
                                 username: true,
                                 email: true
                             }
+                        },
+                        createdBy: {
+                            select: {
+                                id: true,
+                                username: true,
+                                email: true
+                            }
+                        },
+                        updatedBy: {
+                            select: {
+                                id: true,
+                                username: true,
+                                email: true
+                            }
                         }
                     },
                     orderBy: {
@@ -31,6 +45,20 @@ export const ticketService = {
                     include: {
                         status: true,
                         user: {
+                            select: {
+                                id: true,
+                                username: true,
+                                email: true
+                            }
+                        },
+                        createdBy: {
+                            select: {
+                                id: true,
+                                username: true,
+                                email: true
+                            }
+                        },
+                        updatedBy: {
                             select: {
                                 id: true,
                                 username: true,

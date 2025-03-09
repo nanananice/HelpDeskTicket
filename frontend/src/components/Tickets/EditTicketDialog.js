@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { getStatusColor, STATUS_MAP } from '../../utils/statusUtils';
 
 function EditTicketDialog({ ticket, onClose, onSave, isAdmin }) {
     const [editedTicket, setEditedTicket] = useState({
@@ -23,13 +24,6 @@ function EditTicketDialog({ ticket, onClose, onSave, isAdmin }) {
                 [name]: value
             }));
         }
-    };
-
-    const statusMap = {
-        'PENDING': 1,
-        'ACCEPTED': 2,
-        'RESOLVED': 3,
-        'REJECTED': 4
     };
 
     const handleSubmit = async (e) => {
@@ -63,7 +57,13 @@ function EditTicketDialog({ ticket, onClose, onSave, isAdmin }) {
     return (
         <div className="dialog-overlay">
             <div className="dialog-content">
-                <h2>Edit Ticket</h2>
+                <h2>
+                    <div 
+                        className="status-indicator" 
+                        style={{ backgroundColor: getStatusColor(editedTicket.statusId) }}
+                    ></div>
+                    Edit Ticket
+                </h2>
                 {error && <div className="error-message">{error}</div>}
                 <form onSubmit={handleSubmit}>
                 <div className="form-group">
@@ -95,8 +95,9 @@ function EditTicketDialog({ ticket, onClose, onSave, isAdmin }) {
                             value={editedTicket.statusId}
                             onChange={handleChange}
                             disabled={!isAdmin}
+                            style={{ borderLeft: `4px solid ${getStatusColor(editedTicket.statusId)}` }}
                         >
-                            {Object.entries(statusMap).map(([status, id]) => (
+                            {Object.entries(STATUS_MAP).map(([status, id]) => (
                                 <option key={status} value={id}>
                                     {status}
                                 </option>
