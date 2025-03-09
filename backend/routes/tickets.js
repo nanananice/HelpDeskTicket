@@ -10,7 +10,16 @@ const prisma = new PrismaClient();
 // Admin gets all tickets, regular users only get their own
 router.get('/', authenticate, async (req, res) => {
     try {
-        const tickets = await ticketService.getAllTickets(req.user.id, req.user.role);
+        // Extract query parameters for filtering and sorting
+        const { statusId, sortBy, sortOrder } = req.query;
+        
+        const options = {
+            statusId,
+            sortBy,
+            sortOrder: sortOrder === 'asc' ? 'asc' : 'desc'
+        };
+
+        const tickets = await ticketService.getAllTickets(req.user.id, req.user.role, options);
         res.json(tickets);
     } catch (error) {
         console.error('Error fetching tickets:', error);

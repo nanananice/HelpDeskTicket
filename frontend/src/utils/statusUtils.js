@@ -33,3 +33,25 @@ export const STATUS_MAP = {
     'RESOLVED': 3,
     'REJECTED': 4
 };
+
+// Get a user-friendly display name for status
+export const getStatusDisplayName = (status) => {
+    if (typeof status === 'string') {
+        return status.charAt(0) + status.slice(1).toLowerCase();
+    } else if (typeof status === 'number') {
+        for (const [name, id] of Object.entries(STATUS_MAP)) {
+            if (id === status) {
+                return name.charAt(0) + name.slice(1).toLowerCase();
+            }
+        }
+    }
+    return 'Unknown';
+};
+
+// Sort options for tickets
+export const SORT_OPTIONS = {
+    STATUS: 'status',
+    UPDATED: 'updated',
+    CREATED: 'created',
+    TITLE: 'title'
+};

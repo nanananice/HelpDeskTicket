@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getStatusColor, STATUS_MAP } from '../../utils/statusUtils';
+import { getStatusColor, STATUS_MAP, getStatusDisplayName } from '../../utils/statusUtils';
 
 function EditTicketDialog({ ticket, onClose, onSave, isAdmin }) {
     const [editedTicket, setEditedTicket] = useState({
@@ -99,7 +99,7 @@ function EditTicketDialog({ ticket, onClose, onSave, isAdmin }) {
                         >
                             {Object.entries(STATUS_MAP).map(([status, id]) => (
                                 <option key={status} value={id}>
-                                    {status}
+                                    {getStatusDisplayName(status)}
                                 </option>
                             ))}
                         </select>

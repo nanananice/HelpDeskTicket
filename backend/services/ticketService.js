@@ -3,74 +3,68 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export const ticketService = {
-    async getAllTickets(userId, userRole) {
+    async getAllTickets(userId, userRole, options = {}) {
         try {
-            if (userRole === 'ADMIN') {
-                // Admin can see all tickets
-                return await prisma.ticket.findMany({
-                    include: {
-                        status: true,
-                        user: {
-                            select: {
-                                id: true,
-                                username: true,
-                                email: true
-                            }
-                        },
-                        createdBy: {
-                            select: {
-                                id: true,
-                                username: true,
-                                email: true
-                            }
-                        },
-                        updatedBy: {
-                            select: {
-                                id: true,
-                                username: true,
-                                email: true
-                            }
-                        }
-                    },
-                    orderBy: {
-                        createdAt: 'desc'
-                    }
-                });
-            } else {
-                // Regular users can only see their own tickets
-                return await prisma.ticket.findMany({
-                    where: {
-                        userId: userId
-                    },
-                    include: {
-                        status: true,
-                        user: {
-                            select: {
-                                id: true,
-                                username: true,
-                                email: true
-                            }
-                        },
-                        createdBy: {
-                            select: {
-                                id: true,
-                                username: true,
-                                email: true
-                            }
-                        },
-                        updatedBy: {
-                            select: {
-                                id: true,
-                                username: true,
-                                email: true
-                            }
-                        }
-                    },
-                    orderBy: {
-                        createdAt: 'desc'
-                    }
-                });
+            // Extract filtering and sorting options with desc as default sort order
+            const { statusId, sortBy = 'updatedAt', sortOrder = 'desc' } = options;
+            
+            // Base query conditions
+            const whereConditions = userRole === 'ADMIN' 
+                ? {} 
+                : { userId: userId };
+                
+            // Add status filter if provided
+            if (statusId && !isNaN(parseInt(statusId))) {
+                whereConditions.statusId = parseInt(statusId);
             }
+            
+            // Determine sorting
+            let orderBy = {};
+            switch (sortBy) {
+                case 'status':
+                    orderBy = { status: { id: sortOrder } };
+                    break;
+                case 'created':
+                    orderBy = { createdAt: sortOrder };
+                    break;
+                case 'title':
+                    orderBy = { title: sortOrder };
+                    break;
+                case 'updated':
+                default:
+                    orderBy = { updatedAt: sortOrder };
+                    break;
+            }
+
+            // Execute query with filters and sorting
+            return await prisma.ticket.findMany({
+                where: whereConditions,
+                include: {
+                    status: true,
+                    user: {
+                        select: {
+                            id: true,
+                            username: true,
+                            email: true
+                        }
+                    },
+                    createdBy: {
+                        select: {
+                            id: true,
+                            username: true,
+                            email: true
+                        }
+                    },
+                    updatedBy: {
+                        select: {
+                            id: true,
+                            username: true,
+                            email: true
+                        }
+                    }
+                },
+                orderBy
+            });
         } catch (error) {
             throw new Error(`Error fetching tickets: ${error.message}`);
         }

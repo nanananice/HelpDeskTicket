@@ -14,7 +14,7 @@ api.interceptors.request.use((config) => {
 });
 
 export const ticketService = {
-    getAllTickets: () => api.get('/tickets'),
+    getAllTickets: (params) => api.get('/tickets', { params }),
     createTicket: (ticketData) => api.post('/tickets', ticketData),
     updateTicket: (id, ticketData) => api.put(`/tickets/${id}`, ticketData),
 };
