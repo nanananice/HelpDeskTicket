@@ -3,7 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { ticketService } from '../../services/api';
 import AddTicketForm from './AddTicketForm';
 import MainLayout from '../Layout/MainLayout';
-import StatusBox from './StatusBox';
+import Tickets from './Tickets';
 import EditTicketDialog from './EditTicketDialog';
 
 function TicketList() {
@@ -105,25 +105,25 @@ function TicketList() {
                 )}
 
                 <div className="status-boxes">
-                    <StatusBox
+                    <Tickets
                         title="Pending"
                         tickets={groupTicketsByStatus().PENDING}
                         color="#FFA500"
                         onTicketClick={handleTicketClick}
                     />
-                    <StatusBox
+                    <Tickets
                         title="Accepted"
                         tickets={groupTicketsByStatus().ACCEPTED}
                         color="#0066cc"
                         onTicketClick={handleTicketClick}
                     />
-                    <StatusBox
+                    <Tickets
                         title="Resolved"
                         tickets={groupTicketsByStatus().RESOLVED}
                         color="#008000"
                         onTicketClick={handleTicketClick}
                     />
-                    <StatusBox
+                    <Tickets
                         title="Rejected"
                         tickets={groupTicketsByStatus().REJECTED}
                         color="#FF0000"

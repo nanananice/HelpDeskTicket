@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
 
-function StatusBox({ title, tickets, color, onTicketClick }) {
+function Tickets({ title, tickets, color, onTicketClick }) {
     const { currentUser } = useAuth();
     const isAdmin = currentUser?.role === 'ADMIN';
 
@@ -20,11 +20,12 @@ function StatusBox({ title, tickets, color, onTicketClick }) {
                         >
                             <h4>{ticket.title}</h4>
                             <p>{ticket.description}</p>
+                            <span className="date">
+                                    Created: {new Date(ticket.createdAt).toLocaleDateString()} {new Date(ticket.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                            </span>
                             <div className="ticket-footer">
-                                <span className="date">
-                                    {new Date(ticket.createdAt).toLocaleDateString()}
-                                </span>
-                                <span className="contact">{ticket.user.email}</span>
+
+                                <span className="date">{ticket.user.email}</span>
                             </div>
                         </div>
                     ))
@@ -34,4 +35,4 @@ function StatusBox({ title, tickets, color, onTicketClick }) {
     );
 }
 
-export default StatusBox;
+export default Tickets;

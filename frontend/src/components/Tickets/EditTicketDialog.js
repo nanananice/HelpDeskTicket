@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { TICKET_STATUS } from '../../constants/config';
+import React, { useState } from 'react';
 
 function EditTicketDialog({ ticket, onClose, onSave, isAdmin }) {
     const [editedTicket, setEditedTicket] = useState({
