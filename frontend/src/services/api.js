@@ -21,4 +21,6 @@ export const ticketService = {
 
 export const authService = {
     login: (credentials) => api.post('/auth/login', credentials),
+    register: (userData) => api.post('/auth/register', userData),
+    resetPassword: (email, newPassword) => api.post('/auth/reset-password', { email, newPassword }),
 };

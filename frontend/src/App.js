@@ -5,6 +5,8 @@ import './styles/layout.css';
 import './styles/auth.css';
 import './styles/tickets.css';
 import Login from './components/Login';
+import Register from './components/Register';
+import ResetPassword from './components/ResetPassword';
 import TicketList from './components/Tickets/TicketList';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
@@ -16,6 +18,8 @@ const App = () => {
         <div className="App">
           <Routes>
             <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/Home" element={
               <ProtectedRoute>
                 <TicketList />

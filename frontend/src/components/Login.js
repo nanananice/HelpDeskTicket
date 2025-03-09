@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 function Login() {
@@ -8,9 +8,18 @@ function Login() {
         password: ''
     });
     const [error, setError] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-    const { login } = useAuth(); // Import login function from AuthContext
+    const { login } = useAuth();
+    const [searchParams] = useSearchParams();
+    
+    // Check for reset success message in URL
+    useEffect(() => {
+        if (searchParams.get('resetSuccess') === 'true') {
+            setSuccessMessage('Your password has been reset successfully. Please log in with your new password.');
+        }
+    }, [searchParams]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -23,6 +32,7 @@ function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        setSuccessMessage('');
         setLoading(true);
 
         try {
@@ -49,6 +59,7 @@ function Login() {
             <div className="login-form-container">
                 <h2>Help Desk Login</h2>
                 {error && <div className="error-message">{error}</div>}
+                {successMessage && <div className="success-message">{successMessage}</div>}
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="email">Email</label>
@@ -79,8 +90,8 @@ function Login() {
                     </button>
                 </form>
                 <div className="login-footer">
-                    <p>Forgot password? <a href="/reset-password">Reset it here</a></p>
-                    <p>Need an account? <a href="/register">Register</a></p>
+                    <p>Forgot password? <Link to="/reset-password">Reset it here</Link></p>
+                    <p>Need an account? <Link to="/register">Register</Link></p>
                 </div>
             </div>
         </div>
