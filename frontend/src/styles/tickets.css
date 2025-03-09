@@ -11,6 +11,7 @@
     padding: 15px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     min-height: 300px;
+    max-width: 500px;
 }
 
 .status-box h3 {
@@ -51,6 +52,7 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     color: #333;
+    padding-bottom: 4px;
 }
 
 .ticket-card p {
@@ -60,6 +62,7 @@
     text-overflow: ellipsis;
     font-size: 0.9em;
     color: #666;
+    padding-bottom: 6px;
 }
 
 .ticket-card .ticket-footer {
@@ -67,7 +70,6 @@
     justify-content: space-between;
     font-size: 0.8em;
     color: #888;
-
 }
 
 .ticket-dates {
@@ -85,9 +87,14 @@
     margin-right: 4px;
 }
 
+.date-info {
+    padding-bottom: 4px;
+}
+
 .email-info {
     font-weight: bold;
     text-align: right;
+    padding-bottom: 4px;
 }
 
 .actions-bar {

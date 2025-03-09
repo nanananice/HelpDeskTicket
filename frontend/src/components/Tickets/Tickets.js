@@ -24,11 +24,11 @@ function Tickets({ title, tickets, color, onTicketClick }) {
                             <p>{ticket.description}</p>
                             <div className="ticket-footer">
                                 <div className="ticket-dates">
-                                    <span>
+                                    <span className="date-info">
                                         <span className="date-label">Created:</span>
                                         {new Date(ticket.createdAt).toLocaleDateString()} {new Date(ticket.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                                     </span>
-                                    <span>
+                                    <span className="date-info">
                                         <span className="date-label">Updated:</span>
                                         {new Date(ticket.updatedAt).toLocaleDateString()} {new Date(ticket.updatedAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                                     </span>
