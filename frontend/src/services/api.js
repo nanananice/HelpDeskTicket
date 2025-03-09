@@ -16,7 +16,7 @@ api.interceptors.request.use((config) => {
 export const ticketService = {
     getAllTickets: () => api.get('/tickets'),
     createTicket: (ticketData) => api.post('/tickets', ticketData),
-    updateTicket: (id, ticketData) => api.put(`/tickets/${id}`, ticketData),  // Remove /api prefix
+    updateTicket: (id, ticketData) => api.put(`/tickets/${id}`, ticketData),
 };
 
 export const authService = {
