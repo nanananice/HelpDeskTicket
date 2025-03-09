@@ -10,10 +10,20 @@ function EditTicketDialog({ ticket, onClose, onSave, isAdmin }) {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setEditedTicket(prev => ({
-            ...prev,
-            [name]: value
-        }));
+        
+        // For statusId, ensure it's stored as a number
+        if (name === 'statusId') {
+            const parsedValue = parseInt(value, 10);
+            setEditedTicket(prev => ({
+                ...prev,
+                [name]: isNaN(parsedValue) ? '' : parsedValue
+            }));
+        } else {
+            setEditedTicket(prev => ({
+                ...prev,
+                [name]: value
+            }));
+        }
     };
 
     const statusMap = {
@@ -28,13 +38,21 @@ function EditTicketDialog({ ticket, onClose, onSave, isAdmin }) {
         setError('');
         
         try {
-            const updateData = {
-                ...(isAdmin ? { statusId: parseInt(editedTicket.statusId) } : {}),
-                ...(!isAdmin ? {
-                    title: editedTicket.title,
-                    description: editedTicket.description
-                } : {})
-            };
+            // Prepare update data based on user role
+            const updateData = {};
+            
+            if (isAdmin) {
+                // Ensure statusId is a valid number
+                if (!editedTicket.statusId || isNaN(parseInt(editedTicket.statusId, 10))) {
+                    setError('Please select a valid status');
+                    return;
+                }
+                updateData.statusId = parseInt(editedTicket.statusId, 10);
+            } else {
+                // For regular users
+                updateData.title = editedTicket.title;
+                updateData.description = editedTicket.description;
+            }
             
             await onSave(ticket.id, updateData);
         } catch (err) {
@@ -49,7 +67,7 @@ function EditTicketDialog({ ticket, onClose, onSave, isAdmin }) {
                 <h2>Edit Ticket</h2>
                 {error && <div className="error-message">{error}</div>}
                 <form onSubmit={handleSubmit}>
-                    <div className="form-group">
+                <div className="form-group">
                         <label>Title</label>
                         <input
                             type="text"
@@ -71,22 +89,21 @@ function EditTicketDialog({ ticket, onClose, onSave, isAdmin }) {
                             rows="4"
                         />
                     </div>
-                    {isAdmin && (
-                        <div className="form-group">
-                            <label>Status</label>
-                            <select
-                                name="statusId"
-                                value={editedTicket.statusId}
-                                onChange={handleChange}
-                            >
-                                {Object.entries(statusMap).map(([status, id]) => (
-                                    <option key={status} value={id}>
-                                        {status}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                    )}
+                    <div className="form-group">
+                        <label>Status</label>
+                        <select
+                            name="statusId"
+                            value={editedTicket.statusId}
+                            onChange={handleChange}
+                            disabled={!isAdmin}
+                        >
+                            {Object.entries(statusMap).map(([status, id]) => (
+                                <option key={status} value={id}>
+                                    {status}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                     <div className="form-actions">
                         <button type="submit" className="btn btn-primary">
                             Save Changes

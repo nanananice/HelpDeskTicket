@@ -53,23 +53,43 @@ router.put('/:id', authenticate, async (req, res) => {
         const ticketId = parseInt(req.params.id);
         console.log('Updating ticket:', ticketId, 'with data:', req.body); // Debug log
         
-        // Verify user role
-        if (req.user.role !== 'ADMIN') {
-            return res.status(403).json({ error: 'Only admins can update tickets' });
+        let updatedFields = {};
+        
+        // Different permissions based on role
+        if (req.user.role === 'ADMIN') {
+            // Admin can only update status
+            if (req.body.statusId !== undefined && req.body.statusId !== null) {
+                const parsedStatusId = parseInt(req.body.statusId, 10);
+                if (isNaN(parsedStatusId)) {
+                    return res.status(400).json({ error: 'Status ID must be a valid number' });
+                }
+                updatedFields.statusId = parsedStatusId;
+            } else {
+                return res.status(400).json({ error: 'Status ID is required for admin updates' });
+            }
+        } else {
+            // Regular users can only update title and description
+            if (req.body.title) updatedFields.title = req.body.title;
+            if (req.body.description) updatedFields.description = req.body.description;
+            
+            if (!updatedFields.title && !updatedFields.description) {
+                return res.status(400).json({ error: 'Title or description is required for user updates' });
+            }
         }
 
-        // Validate request body
-        if (!req.body.statusId) {
-            return res.status(400).json({ error: 'Status ID is required' });
-        }
-
-        const updatedTicket = await ticketService.updateTicket(ticketId, req.body, req.user.id);
+        const updatedTicket = await ticketService.updateTicket(ticketId, updatedFields, req.user.id);
         console.log('Updated ticket:', updatedTicket); // Debug log
         res.json(updatedTicket);
     } catch (error) {
         console.error('Error updating ticket:', error);
         if (error.message === 'Ticket not found') {
             return res.status(404).json({ error: 'Ticket not found' });
+        }
+        if (error.message === 'Unauthorized') {
+            return res.status(403).json({ error: 'You can only update your own tickets' });
+        }
+        if (error.message.includes('Invalid status ID')) {
+            return res.status(400).json({ error: error.message });
         }
         res.status(500).json({ error: 'Failed to update ticket', details: error.message });
     }

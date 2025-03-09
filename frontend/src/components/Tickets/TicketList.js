@@ -48,6 +48,16 @@ function TicketList() {
 
     const handleEditSave = async (ticketId, updatedData) => {
         try {
+            // Validate statusId if present
+            if (updatedData.statusId !== undefined) {
+                const parsedStatusId = parseInt(updatedData.statusId, 10);
+                if (isNaN(parsedStatusId)) {
+                    throw new Error('Invalid status ID');
+                }
+                // Ensure we're sending a number, not a string
+                updatedData.statusId = parsedStatusId;
+            }
+            
             const response = await ticketService.updateTicket(ticketId, updatedData);
             // Update local state with the updated ticket
             setTickets(tickets.map(ticket => 
@@ -57,6 +67,7 @@ function TicketList() {
             return response.data;
         } catch (error) {
             console.error('Error updating ticket:', error);
+            // Show error notification or handle as needed
             throw error;
         }
     };

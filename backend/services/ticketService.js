@@ -82,12 +82,33 @@ export const ticketService = {
                 throw new Error('Ticket not found');
             }
 
+            // Create the update data object with validated fields
+            const updateData = {
+                updatedById: userId
+            };
+
+            // Only add statusId if it's a valid number
+            if (ticketData.statusId !== undefined && ticketData.statusId !== null) {
+                const parsedStatusId = parseInt(ticketData.statusId, 10);
+                if (!isNaN(parsedStatusId)) {
+                    updateData.statusId = parsedStatusId;
+                } else {
+                    throw new Error('Invalid status ID: must be a number');
+                }
+            }
+
+            // Add title and description if provided
+            if (ticketData.title !== undefined) {
+                updateData.title = ticketData.title;
+            }
+            
+            if (ticketData.description !== undefined) {
+                updateData.description = ticketData.description;
+            }
+
             return await prisma.ticket.update({
                 where: { id: ticketId },
-                data: {
-                    statusId: parseInt(ticketData.statusId),
-                    updatedById: userId
-                },
+                data: updateData,
                 include: {
                     status: true,
                     user: {
