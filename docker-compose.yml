@@ -21,6 +21,13 @@ services:
     depends_on:
       - db
     command: sh -c "./start.sh"
+  
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
     
 volumes:
   postgres_data:
